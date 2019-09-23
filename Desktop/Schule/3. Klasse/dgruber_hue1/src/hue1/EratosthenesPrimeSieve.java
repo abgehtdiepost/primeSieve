@@ -1,6 +1,9 @@
 package hue1;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,41 +17,46 @@ import java.util.ArrayList;
  */
 public class EratosthenesPrimeSieve implements PrimeSieve {
     public int prime;
-    public ArrayList<Integer> noPrimes;
-    public ArrayList<Integer> primes;
+    public ArrayList<Integer> primeNumbers;
+    public boolean primes[];
     
     public EratosthenesPrimeSieve (int prime) {
-        prime = this.prime;
-        noPrimes  = new ArrayList<Integer>();
-        primes = new ArrayList<Integer>();
-        isPrime(prime);
+        this.prime = prime;
+        primeNumbers  = new ArrayList<Integer>();
+        primes = new boolean[prime+1];
+        Arrays.fill(primes, true);
+        isPrime(this.prime);
+        getPrimes(this.prime);
         printPrimes();
     }
     
     
     @Override
     public boolean isPrime(int p) {
-        if (p % 2 == 0) {
-            return false;
-        }
-        for ( int i = 3; i*i <= p; i+=2) {
-            if (p % i == 0) {
-                return false;
+        for (int i = 2; i*i <= p; i++) {
+            if (primes[i]) {
+                for (int j = i * 2; j <= p; j += i) {
+                    primes[j] = false;
+                }
             }
         }
+        
         return true;
     }
 
-    @Override
-    public void printPrimes() {
-        for (int i = 0; i < primes.size(); i++) {
-            System.out.println(primes.get(i));
+    public void getPrimes(int p) {
+        for (int i = 2; i <= p; i++) {
+            if (primes[i]) {
+                primeNumbers.add(i);
+            }
         }
-        System.out.println("ab geht die post");
     }
     
-    public void getPrimes (int p) {
-        
+    @Override
+    public void printPrimes() {
+        for (int i = 0; i < primeNumbers.size(); i++) {
+            System.out.println(primeNumbers.get(i));
+        }
     }
     
 }
